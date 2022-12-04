@@ -32,3 +32,39 @@ for i in range(0, bag_num):
             priorities[i] = priority
 
 print("The sum of the highest shared piority items: {}".format(sum(priorities)))
+
+# Part 2: Items in common with every three sacks
+group_num = 0
+member_num = 0
+bags = []
+badges = []
+
+with open('./sacks', 'r') as lines:
+    for line in lines:
+        if member_num % 3 == 0:
+            bags.append([0, 0, 0])
+        line = line.strip()
+        bags[group_num][member_num] = line
+
+        member_num += 1
+        if member_num == 3:
+            # check for matching badges then move to the next group
+            badges.append(0)
+
+            for chr in bags[group_num][0]:
+                if chr in bags[group_num][1] and chr in bags[group_num][2]:
+                    # get the bagde priority
+                    if ord(chr) >= ord('a'):
+                        priority = ord(chr) - ord('a') + 1
+                    else:
+                        priority = ord(chr) - ord('A') + 27
+
+                           
+                    if priority > badges[group_num]:
+                        #print("Added '{}' ({}) in all 3 in group {}!".format(chr, priority, group_num))
+                        badges[group_num] = priority
+
+            group_num += 1
+            member_num = 0
+
+print("The sum of all groups' badge priorities: {}".format(sum(badges)))
